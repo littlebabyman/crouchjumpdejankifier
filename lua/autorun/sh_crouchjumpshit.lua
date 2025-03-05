@@ -36,6 +36,7 @@ local eManipulateBonePosition = ENTITY.ManipulateBonePosition
 local enabled = CreateConVar("sv_crouchjumpdejank_enable", 1, bit.bor(FCVAR_ARCHIVE, FCVAR_REPLICATED), "", 0, 1)
 local crouchJumpers = {}
 local vector_reset = Vector(0,0,0)
+local sp = game.SinglePlayer()
 
 local function crouchModelAdjustment(ply)
     if !enabled:GetBool() then
@@ -51,7 +52,7 @@ local function crouchModelAdjustment(ply)
 
     -- Only set our bone back to origin if we need to.
     if !crouchJumping and crouchJumpers[ply] then
-        eManipulateBonePosition(ply, 0, vector_reset)
+        eManipulateBonePosition(ply, 0, vector_reset, sp)
     end
 
     -- NOTE: In theory this can lead to a bloated table.
@@ -88,7 +89,7 @@ local function crouchModelAdjustment(ply)
         local total = Lerp((hullTrace.Fraction + trace.Fraction) * 0.5, 0, -cMaxs.z)
 
         -- TODO: Does this hook run for other players?
-        eManipulateBonePosition(ply, 0, Vector(0, 0, total))
+        eManipulateBonePosition(ply, 0, Vector(0, 0, total), sp)
     end
 end
 
